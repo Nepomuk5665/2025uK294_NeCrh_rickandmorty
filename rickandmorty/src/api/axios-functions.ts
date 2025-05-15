@@ -22,6 +22,14 @@ export const fetchCharacters = (page = 1) => {
   return axios.get(`https://rickandmortyapi.com/api/character/?page=${page}`);
 };
 
+export const fetchRickAndMortyCharacters = (start = 0, limit = 10, token: string) => {
+  return axios.get(`${API_URL}/rickandmorty?_start=${start}&_end=${limit}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+};
+
 export const getAuthToken = () => {
   return localStorage.getItem('token');
 };
