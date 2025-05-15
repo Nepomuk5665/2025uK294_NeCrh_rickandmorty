@@ -1,6 +1,7 @@
 import React from 'react'
 import { useFormik } from 'formik';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -10,6 +11,7 @@ import { checkAuthentication, logout } from './api/auth-utils';
 import { setAuthData } from './api/axios-functions';
 
 export default function Authentication() {
+    const navigate = useNavigate();
     const [isSignUp, setIsSignUp] = React.useState(false);
     const [singedin, setSingedin] = useState<boolean>(false);
 
@@ -57,6 +59,7 @@ export default function Authentication() {
 
                     setAuthData(response.data.accessToken, response.data.user.id);
                     setSingedin(true);
+                    navigate('/characters');
                 })
                 .catch((error) => {
                     console.error(error);
@@ -74,6 +77,7 @@ export default function Authentication() {
 
                     setAuthData(response.data.accessToken, response.data.user.id);
                     setSingedin(true);
+                    navigate('/characters');
                 })
                 .catch((error) => {
                     console.error(error);
@@ -91,6 +95,9 @@ export default function Authentication() {
     async function onLoad() {
         const result = await checkAuthentication();
         setSingedin(result.isAuthenticated);
+        if (result.isAuthenticated) {
+            navigate('/characters');
+        }
     }
 
     return (

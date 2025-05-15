@@ -1,4 +1,4 @@
-import { getUserData, getAuthToken, getUserId, clearAuthData, setAuthData } from "./axios-functions";
+import { getUserData, getAuthToken, getUserId, clearAuthData } from "./axios-functions";
 
 export interface AuthCheckResult {
   isAuthenticated: boolean;
@@ -27,6 +27,11 @@ export const checkAuthentication = async (): Promise<AuthCheckResult> => {
     };
   } catch (error) {
     console.error('Error:', error);
+    // Handle token expiration - if 401 Unauthorized, clear the token
+    if (error.response && error.response.status === 401) {
+      console.log("Token expired or invalid. Logging out...");
+      logout();
+    }
     return { isAuthenticated: false };
   }
 };
