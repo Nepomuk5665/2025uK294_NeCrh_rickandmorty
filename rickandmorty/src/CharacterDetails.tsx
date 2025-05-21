@@ -52,11 +52,11 @@ const DetailItem = ({ label, value }) => {
 // Organism - Character edit form
 const CharacterEditForm = ({ character, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
-    name: character.name,
-    status: character.status,
-    species: character.species,
-    type: character.type,
-    gender: character.gender
+    name: character.name || '',
+    status: character.status || '',
+    species: character.species || '',
+    type: character.type || '',
+    gender: character.gender || ''
   });
 
   const handleChange = (e) => {
@@ -242,7 +242,7 @@ export default function CharacterDetails() {
             
             <div>
               <div>
-                <img src={character.image} alt={character.name} style={{ width: '200px' }} />
+                <img src={character.image || 'https://via.placeholder.com/200'} alt={character.name} style={{ width: '200px' }} />
               </div>
               
               <div>
@@ -253,10 +253,10 @@ export default function CharacterDetails() {
                 <DetailItem label="Species" value={character.species} />
                 <DetailItem label="Type" value={character.type} />
                 <DetailItem label="Gender" value={character.gender} />
-                <DetailItem label="Origin" value={character.origin.name} />
-                <DetailItem label="Location" value={character.location.name} />
+                <DetailItem label="Origin" value={character.origin?.name} />
+                <DetailItem label="Location" value={character.location?.name} />
                 <DetailItem label="Created" value={new Date(character.created).toLocaleDateString()} />
-                <DetailItem label="Episodes" value={character.episode.length} />
+                <DetailItem label="Episodes" value={character.episode?.length || 0} />
               </div>
             </div>
           </div>
