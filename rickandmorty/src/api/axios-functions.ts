@@ -2,66 +2,60 @@ import axios from 'axios';
 
 export const API_URL = 'http://localhost:3030';
 
+
+const api = axios.create({
+  baseURL: API_URL
+});
+
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+
 export const register = (values: { email: string; password: string }) => {
-  return axios.post(`${API_URL}/register`, values);
+  return api.post('/register', values);
 };
 
 export const login = (values: { email: string; password: string }) => {
-  return axios.post(`${API_URL}/login`, values);
+  return api.post('/login', values);
 };
 
-export const getUserData = (userId: string, token: string) => {
-  return axios.get(`${API_URL}/600/users/${userId}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
+export const getUserData = (userId: string) => {
+  return api.get(`/600/users/${userId}`);
 };
 
-export const fetchCharacters = (page = 1) => {
-  return axios.get(`https://rickandmortyapi.com/api/character/?page=${page}`);
+
+export const fetchRickAndMortyCharacters = (start = 0, limit = 10) => {
+  return api.get(`/rickandmorty?_start=${start}&_end=${limit}`);
 };
 
-export const fetchRickAndMortyCharacters = (start = 0, limit = 10, token: string) => {
-  return axios.get(`${API_URL}/rickandmorty?_start=${start}&_end=${limit}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
+export const fetchCharacterById = (id: string) => {
+  return api.get(`/rickandmorty/${id}`);
 };
 
-export const fetchCharacterById = (id: string, token: string) => {
-  return axios.get(`${API_URL}/rickandmorty/${id}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
+export const updateCharacter = (id: string, characterData: any) => {
+  return api.patch(`/rickandmorty/${id}`, characterData);
 };
 
-export const updateCharacter = (id: string, characterData: any, token: string) => {
-  return axios.patch(`${API_URL}/rickandmorty/${id}`, characterData, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
+export const deleteCharacter = (id: string) => {
+  return api.delete(`/rickandmorty/${id}`);
 };
 
-export const deleteCharacter = (id: string, token: string) => {
-  return axios.delete(`${API_URL}/rickandmorty/${id}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
+export const createCharacter = (characterData: any) => {
+  return api.post('/rickandmorty', characterData);
 };
 
-export const createCharacter = (characterData: any, token: string) => {
-  return axios.post(`${API_URL}/rickandmorty`, characterData, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
-};
-
+// Local storage functions
 export const getAuthToken = () => {
   return localStorage.getItem('token');
 };

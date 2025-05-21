@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkAuthentication } from './api/auth-utils';
-import { fetchRickAndMortyCharacters, getAuthToken, deleteCharacter, createCharacter } from './api/axios-functions';
+import { fetchRickAndMortyCharacters, deleteCharacter, createCharacter } from './api/axios-functions';
 import LogoutButton from './LogoutButton';
 
 // Character Interface - Data Model
@@ -235,10 +235,7 @@ export default function Characterlist() {
   
   async function loadCharacters() {
     try {
-      const token = getAuthToken();
-      if (!token) return;
-      
-      const response = await fetchRickAndMortyCharacters(start, start + limit, token);
+      const response = await fetchRickAndMortyCharacters(start, start + limit);
       if (response.data && response.data.length > 0) {
         setCharacters(response.data);
         setNoResults(false);
@@ -276,10 +273,7 @@ export default function Characterlist() {
   async function handleDelete(id: number) {
     if (window.confirm('Are you sure you want to delete this character?')) {
       try {
-        const token = getAuthToken();
-        if (!token) return;
-        
-        await deleteCharacter(id.toString(), token);
+        await deleteCharacter(id.toString());
         loadCharacters();
       } catch (error) {
         console.error('Error deleting character:', error);
@@ -292,10 +286,7 @@ export default function Characterlist() {
   
   async function handleAddCharacter(data) {
     try {
-      const token = getAuthToken();
-      if (!token) return;
-      
-      await createCharacter(data, token);
+      await createCharacter(data);
       setShowAddForm(false);
       loadCharacters();
     } catch (error) {

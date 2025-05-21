@@ -5,7 +5,7 @@ import Characterlist from './Character-list'
 import CharacterDetails from './CharacterDetails'
 import { getAuthToken } from './api/axios-functions'
 
-// Protected route wrapper component
+
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const token = getAuthToken();
   

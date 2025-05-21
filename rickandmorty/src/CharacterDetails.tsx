@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchCharacterById, updateCharacter, deleteCharacter, getAuthToken } from './api/axios-functions';
+import { fetchCharacterById, updateCharacter, deleteCharacter } from './api/axios-functions';
 import { checkAuthentication } from './api/auth-utils';
 import LogoutButton from './LogoutButton';
 
@@ -147,10 +147,9 @@ export default function CharacterDetails() {
   async function loadCharacter() {
     try {
       setLoading(true);
-      const token = getAuthToken();
-      if (!token || !id) return;
+      if (!id) return;
       
-      const response = await fetchCharacterById(id, token);
+      const response = await fetchCharacterById(id);
       setCharacter(response.data);
     } catch (error) {
       console.error('Error loading character:', error);
@@ -164,10 +163,9 @@ export default function CharacterDetails() {
   
   async function handleSubmit(formData) {
     try {
-      const token = getAuthToken();
-      if (!token || !id) return;
+      if (!id) return;
       
-      await updateCharacter(id, formData, token);
+      await updateCharacter(id, formData);
       loadCharacter();
       setEditing(false);
     } catch (error) {
@@ -181,10 +179,9 @@ export default function CharacterDetails() {
   async function handleDelete() {
     if (window.confirm('Are you sure you want to delete this character?')) {
       try {
-        const token = getAuthToken();
-        if (!token || !id) return;
+        if (!id) return;
         
-        await deleteCharacter(id, token);
+        await deleteCharacter(id);
         navigate('/characters');
       } catch (error) {
         console.error('Error deleting character:', error);

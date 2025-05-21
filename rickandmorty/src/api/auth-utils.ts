@@ -18,7 +18,7 @@ export const checkAuthentication = async (): Promise<AuthCheckResult> => {
   console.log("Token found: ", token);
 
   try {
-    const response = await getUserData(id as string, token);
+    const response = await getUserData(id as string);
     console.log('Data:', response.data);
     console.log("YOU ARE SIGNED IN");
     return { 
